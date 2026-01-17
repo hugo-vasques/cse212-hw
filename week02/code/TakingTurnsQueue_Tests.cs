@@ -144,6 +144,7 @@ public class TakingTurnsQueueTests
     // Scenario: Try to get the next person from an empty queue
     // Expected Result: Exception should be thrown with appropriate error message.
     // Defect(s) Found: 
+    // The logic in GetNextPerson was missing the case where Turns <= 0, which caused players with infinite turns to be removed right away.
     public void TestTakingTurnsQueue_Empty()
     {
         var players = new TakingTurnsQueue();
