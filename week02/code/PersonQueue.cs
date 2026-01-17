@@ -8,12 +8,15 @@ public class PersonQueue
     public int Length => _queue.Count;
 
     /// <summary>
-    /// Add a person to the queue
+    /// Adds a person to the queue
     /// </summary>
     /// <param name="person">The person to add</param>
     public void Enqueue(Person person)
     {
-        _queue.Insert(0, person);
+        // FIX:
+        // Use Add to insert at the end of the list, not at the beginning.
+        // Before: _queue.Insert(0, person); → that behavior was acting like a Stack (LIFO)
+        _queue.Add(person);
     }
 
     public Person Dequeue()
