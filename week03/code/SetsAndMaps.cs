@@ -2,126 +2,116 @@ using System.Text.Json;
 
 public static class SetsAndMaps
 {
+    /// <summary>
+    /// The words parameter contains a list of two-character
+    /// words (lowercase, no duplicates). Using sets, find an O(n)
+    /// solution that returns all symmetric word pairs.
+    /// </summary>
     public static string[] FindPairs(string[] words)
     {
-        // Keeps track of the words we've already seen.
-        // HashSet gives us O(1) lookups, so it's perfect for this.
+        // PROBLEM 1 SOLUTION
         var seen = new HashSet<string>();
-
-        // Stores the pairs we find in the format "word & reversed".
         var pairs = new List<string>();
 
-        // We only loop once through the list.
         foreach (var word in words)
         {
-            // Reverse the word.
-            // Since every word has exactly 2 letters, we can just swap them.
+            // Reverse the word (example: "am" -> "ma")
             var reversed = $"{word[1]}{word[0]}";
 
-            // Check if we've already seen the reversed version.
+            // If we've already seen the reversed word, it's a pair
             if (seen.Contains(reversed))
             {
-                // If yes, we found a pair.
-                // Example: "ab" & "ba"
                 pairs.Add($"{word} & {reversed}");
             }
             else
             {
-                // If not, we save this word so its pair can find it later.
-                // For "aa", this will be added once, but never matched again
-                // because there are no duplicates.
+                // Otherwise, store the current word for future matches
                 seen.Add(word);
             }
-
-            return pairs.ToArray();
         }
 
-        return [];
+        return pairs.ToArray();
     }
 
-    /// <returns>fixed array of divisors</returns>
+    /// <summary>
+    /// Read a census file and summarize the degrees (education)
+    /// earned by the people listed in the file.
+    /// </summary>
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
+        // PROBLEM 2 SOLUTION
         var degrees = new Dictionary<string, int>();
+
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
 
-            // 1. Get the degree from the 4th column (index 3).
-            // We use Trim() just in case there are extra spaces.
-            var degree = fields[3].Trim();
-
-            // 2. Check if this degree is already in the dictionary.
-            if (degrees.ContainsKey(degree))
+            // Column 4 (index 3) contains the education degree
+            if (fields.Length > 3)
             {
-                // If we've seen it before, just increase the count.
-                degrees[degree]++;
-            }
-            else
-            {
-                // First time seeing this degree, add it with a count of 1.
-                degrees[degree] = 1;
-            }
+                var degree = fields[3].Trim();
 
+                if (degrees.ContainsKey(degree))
+                {
+                    degrees[degree]++;
+                }
+                else
+                {
+                    degrees[degree] = 1;
+                }
+            }
         }
 
         return degrees;
     }
 
     /// <summary>
-    /// Determine if 'word1' and 'word2' are anagrams.  An anagram
-    /// is when the same letters in a word are re-organized into a 
-    /// new word.  A dictionary is used to solve the problem.
-    /// 
-    /// Examples:
-    /// is_anagram("CAT","ACT") would return true
-    /// is_anagram("DOG","GOOD") would return false because GOOD has 2 O's
-    /// 
-    /// Important Note: When determining if two words are anagrams, you
-    /// should ignore any spaces.  You should also ignore cases.  For 
-    /// example, 'Ab' and 'Ba' should be considered anagrams
-    /// 
-    /// Reminder: You can access a letter by index in a string by 
-    /// using the [] notation.
+    /// Determine whether 'word1' and 'word2' are anagrams.
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // 1. Preprocessing: remove spaces and convert to lowercase
-        var w1 = word1.Replace(" ", "").ToLower();
-        var w2 = word2.Replace(" ", "").ToLower();
+        // PROBLEM 3 SOLUTION (optimized for speed)
+        var count1 = new Dictionary<char, int>();
+        int len1 = 0;
 
-        // 2. If lengths are different, they can't be anagrams
-        if (w1.Length != w2.Length)
-            return false;
-
-        // 3. Count letters from the first word
-        var letterCounts = new Dictionary<char, int>();
-
-        foreach (var c in w1)
+        // Count letters from the first word
+        foreach (char c in word1)
         {
-            if (letterCounts.ContainsKey(c))
-                letterCounts[c]++;
+            if (c == ' ') continue;
+            char lower = char.ToLower(c);
+
+            if (count1.ContainsKey(lower))
+                count1[lower]++;
             else
-                letterCounts[c] = 1;
+                count1[lower] = 1;
+
+            len1++;
         }
 
-        // 4. Subtract letters using the second word
-        foreach (var c in w2)
+        int len2 = 0;
+
+        // Subtract letters using the second word
+        foreach (char c in word2)
         {
-            // If a letter doesn't exist in the first word, it's not an anagram
-            if (!letterCounts.ContainsKey(c))
+            if (c == ' ') continue;
+            char lower = char.ToLower(c);
+
+            // If a letter is missing or used too many times, not an anagram
+            if (!count1.ContainsKey(lower) || count1[lower] == 0)
                 return false;
 
-            letterCounts[c]--;
-
-            // If count goes below zero, w2 has this letter too many times
-            if (letterCounts[c] < 0)
-                return false;
+            count1[lower]--;
+            len2++;
         }
 
-        // If we made it this far, the words are exact anagrams
-        return true;
+        // Both words must have the same number of valid characters
+        return len1 == len2;
     }
+
+
+    /// <summary>
+    /// This function will read JSON data from the USGS.
+    /// </summary>
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
