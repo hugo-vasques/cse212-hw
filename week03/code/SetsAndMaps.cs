@@ -46,7 +46,23 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+
+            // 1. Get the degree from the 4th column (index 3).
+            // We use Trim() just in case there are extra spaces.
+            var degree = fields[3].Trim();
+
+            // 2. Check if this degree is already in the dictionary.
+            if (degrees.ContainsKey(degree))
+            {
+                // If we've seen it before, just increase the count.
+                degrees[degree]++;
+            }
+            else
+            {
+                // First time seeing this degree, add it with a count of 1.
+                degrees[degree] = 1;
+            }
+
         }
 
         return degrees;
