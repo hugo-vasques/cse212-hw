@@ -86,8 +86,41 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // 1. Preprocessing: remove spaces and convert to lowercase
+        var w1 = word1.Replace(" ", "").ToLower();
+        var w2 = word2.Replace(" ", "").ToLower();
+
+        // 2. If lengths are different, they can't be anagrams
+        if (w1.Length != w2.Length)
+            return false;
+
+        // 3. Count letters from the first word
+        var letterCounts = new Dictionary<char, int>();
+
+        foreach (var c in w1)
+        {
+            if (letterCounts.ContainsKey(c))
+                letterCounts[c]++;
+            else
+                letterCounts[c] = 1;
+        }
+
+        // 4. Subtract letters using the second word
+        foreach (var c in w2)
+        {
+            // If a letter doesn't exist in the first word, it's not an anagram
+            if (!letterCounts.ContainsKey(c))
+                return false;
+
+            letterCounts[c]--;
+
+            // If count goes below zero, w2 has this letter too many times
+            if (letterCounts[c] < 0)
+                return false;
+        }
+
+        // If we made it this far, the words are exact anagrams
+        return true;
     }
 
     /// <summary>
