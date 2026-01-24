@@ -2,39 +2,43 @@ using System.Text.Json;
 
 public static class SetsAndMaps
 {
-    /// <summary>
-    /// The words parameter contains a list of two character 
-    /// words (lower case, no duplicates). Using sets, find an O(n) 
-    /// solution for returning all symmetric pairs of words.  
-    ///
-    /// For example, if words was: [am, at, ma, if, fi], we would return :
-    ///
-    /// ["am & ma", "if & fi"]
-    ///
-    /// The order of the array does not matter, nor does the order of the specific words in each string in the array.
-    /// at would not be returned because ta is not in the list of words.
-    ///
-    /// As a special case, if the letters are the same (example: 'aa') then
-    /// it would not match anything else (remember the assumption above
-    /// that there were no duplicates) and therefore should not be returned.
-    /// </summary>
-    /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
+        // Keeps track of the words we've already seen.
+        // HashSet gives us O(1) lookups, so it's perfect for this.
+        var seen = new HashSet<string>();
+
+        // Stores the pairs we find in the format "word & reversed".
+        var pairs = new List<string>();
+
+        // We only loop once through the list.
+        foreach (var word in words)
+        {
+            // Reverse the word.
+            // Since every word has exactly 2 letters, we can just swap them.
+            var reversed = $"{word[1]}{word[0]}";
+
+            // Check if we've already seen the reversed version.
+            if (seen.Contains(reversed))
+            {
+                // If yes, we found a pair.
+                // Example: "ab" & "ba"
+                pairs.Add($"{word} & {reversed}");
+            }
+            else
+            {
+                // If not, we save this word so its pair can find it later.
+                // For "aa", this will be added once, but never matched again
+                // because there are no duplicates.
+                seen.Add(word);
+            }
+
+            return pairs.ToArray();
+        }
+
         return [];
     }
 
-    /// <summary>
-    /// Read a census file and summarize the degrees (education)
-    /// earned by those contained in the file.  The summary
-    /// should be stored in a dictionary where the key is the
-    /// degree earned and the value is the number of people that 
-    /// have earned that degree.  The degree information is in
-    /// the 4th column of the file.  There is no header row in the
-    /// file.
-    /// </summary>
-    /// <param name="filename">The name of the file to read</param>
     /// <returns>fixed array of divisors</returns>
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
