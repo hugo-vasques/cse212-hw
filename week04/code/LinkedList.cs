@@ -32,7 +32,23 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void InsertTail(int value)
     {
-        // TODO Problem 1
+        // 1. Create the new node
+        Node newNode = new(value);
+
+        // 2. If the list is empty, the new node becomes both head and tail
+        if (_head is null)
+        {
+            _head = newNode;
+            _tail = newNode;
+        }
+        else
+        {
+            // 3. If the list is not empty, link the new node after the current tail
+            newNode.Prev = _tail;      // The new node points back to the old tail
+            _tail!.Next = newNode;     // The old tail points forward to the new node
+            _tail = newNode;           // Update the tail to be the new node
+        }
+
     }
 
 
@@ -168,8 +184,10 @@ public class LinkedList : IEnumerable<int>
     }
 }
 
-public static class IntArrayExtensionMethods {
-    public static string AsString(this IEnumerable array) {
+public static class IntArrayExtensionMethods
+{
+    public static string AsString(this IEnumerable array)
+    {
         return "<IEnumerable>{" + string.Join(", ", array.Cast<int>()) + "}";
     }
 }
