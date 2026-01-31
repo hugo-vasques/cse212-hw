@@ -136,7 +136,37 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Remove(int value)
     {
-        // TODO Problem 3
+        Node? curr = _head;
+
+        // Traverse the list from the head
+        while (curr is not null)
+        {
+            // If the current node contains the target value
+            if (curr.Data == value)
+            {
+                // If it's the head, reuse the existing method
+                if (curr == _head)
+                {
+                    RemoveHead();
+                }
+                // If it's the tail, reuse the existing method
+                else if (curr == _tail)
+                {
+                    RemoveTail();
+                }
+                else
+                {
+                    // Node is in the middle: reconnect previous and next nodes
+                    curr.Prev!.Next = curr.Next;
+                    curr.Next!.Prev = curr.Prev;
+                }
+
+                // Stop after removing the first matching node
+                return;
+            }
+
+            curr = curr.Next;
+        }
     }
 
     /// <summary>
