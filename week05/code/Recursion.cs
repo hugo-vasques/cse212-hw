@@ -101,20 +101,27 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
-        // Base Cases
-        if (s == 0)
-            return 0;
-        if (s == 1)
-            return 1;
-        if (s == 2)
-            return 2;
-        if (s == 3)
-            return 4;
+        // 1. Start the dictionary if the fisrt letter is called
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
 
-        // TODO Start Problem 3
+        // 2. Base cases
+        if (s < 0) return 0; // If you go over the step, it doesn't count
+        if (s == 0) return 1; // You exactly reached the ending
 
-        // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        // 3. Check Memoization: ¿We already calculated this step before?
+        if (remember.ContainsKey(s))
+            return remember[s];
+
+        // 4. TODO Start Problem 3: Solve using recursion by passing the dictionary
+        // We use the formula: Count(s) = Count(s-1) + Count(s-2) + Count(s-3)
+        decimal ways = CountWaysToClimb(s - 1, remember) +
+                       CountWaysToClimb(s - 2, remember) +
+                       CountWaysToClimb(s - 3, remember);
+
+        // 5. Save the result in the dictionary before returning
+        remember[s] = ways;
+
         return ways;
     }
 
