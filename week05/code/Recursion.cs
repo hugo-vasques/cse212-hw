@@ -39,7 +39,22 @@ public static class Recursion
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
-        // TODO Start Problem 2
+        // BASE CASE: If the current word already has the wanted size, we save it
+        if (word.Length == size)
+        {
+            results.Add(word);
+            return;
+        }
+
+        // RECURSIVE STEP: We tried adding every available letter
+        foreach (char letter in letters)
+        {
+            // We only add the letter if there is not in the actual word (assuming that there are unique words)
+            if (!word.Contains(letter))
+            {
+                PermutationsChoose(results, letters, size, word + letter);
+            }
+        }
     }
 
     /// <summary>
