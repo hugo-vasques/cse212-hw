@@ -11,7 +11,9 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
+        // Problema 1: Not allowing dupes
+        if (value == Data)
+            return;
 
         if (value < Data)
         {
