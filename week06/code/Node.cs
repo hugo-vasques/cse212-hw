@@ -55,6 +55,22 @@ public class Node
         }
     }
 
+    private void TraverseBackward(Node? node, List<int> values)
+    {
+        // Problema 3: Route from highest to lowest
+        if (node is not null)
+        {
+            // 1. First we go through the right subtree (larger values)
+            TraverseBackward(node.Right, values);
+
+            // 2. We add the value of the current node to the list
+            values.Add(node.Data);
+
+            // 3. And finally, we traverse the left subtree (smaller values)
+            TraverseBackward(node.Left, values);
+        }
+    }
+
     public int GetHeight()
     {
         // TODO Start Problem 4
