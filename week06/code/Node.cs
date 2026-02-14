@@ -73,7 +73,19 @@ public class Node
 
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        {
+            // 1. We calculate the height of the left subtree recursively.
+
+            // If the child is null, its height contributes 0.
+            int leftHeight = Left != null ? Left.GetHeight() : 0;
+
+            // 2. We calculate the height of the right subtree recursively.
+
+            // If the child is null, its height contributes 0.
+            int rightHeight = Right != null ? Right.GetHeight() : 0;
+
+            // 3. The height of this node is 1 plus the maximum between the left and right heights.
+            return 1 + Math.Max(leftHeight, rightHeight);
+        }
     }
 }
